@@ -1,0 +1,11 @@
+---
+name: use-pnpm
+description: This is a new rule
+---
+
+# Overview
+
+*   Always use `pnpm install`, `pnpm add`, `pnpm remove`, `pnpm dev`, `pnpm build`, etc., for all operations.
+*   Never use `npm`, `yarn`, or any other package manager.
+*   If you are about to suggest an `npm` or `yarn` command, stop and replace it with the correct `pnpm` equivalent.
+*   Acknowledge this rule before executing any package management command.
