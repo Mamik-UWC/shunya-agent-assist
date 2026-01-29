@@ -15,14 +15,18 @@ import {
   Monitor,
   Calendar,
   Shield,
+  LayoutGrid,
 } from "lucide-react";
 import { ROUTES } from "@/constants/routes";
+import { PERMISSIONS } from "@/constants/permissions";
 
 export interface NavigationItem {
   title: string;
   url: string;
   icon: React.ComponentType<{ className?: string }>;
   badge?: string;
+  /** Optional permission required to show this item (RBAC). */
+  permission?: string;
 }
 
 export const adminNavigationItems: NavigationItem[] = [
@@ -91,25 +95,36 @@ export const managerNavigationItems: NavigationItem[] = [
     title: "Overview",
     url: ROUTES.MANAGER.OVERVIEW,
     icon: LayoutDashboard,
+    permission: PERMISSIONS.VIEW_ANALYTICS,
   },
   {
     title: "Agents",
     url: ROUTES.MANAGER.AGENTS,
     icon: Users,
+    permission: PERMISSIONS.VIEW_AGENTS,
   },
   {
     title: "Sessions",
     url: ROUTES.MANAGER.SESSIONS,
     icon: Calendar,
+    permission: PERMISSIONS.VIEW_SESSIONS,
   },
   {
     title: "Live Monitoring",
     url: ROUTES.MANAGER.LIVE_MONITORING,
     icon: Monitor,
+    permission: PERMISSIONS.LIVE_MONITORING,
+  },
+  {
+    title: "Floor",
+    url: ROUTES.MANAGER.FLOOR,
+    icon: LayoutGrid,
+    permission: PERMISSIONS.LIVE_MONITORING,
   },
   {
     title: "Intelligence",
     url: ROUTES.MANAGER.INTELLIGENCE,
     icon: BarChart3,
+    permission: PERMISSIONS.VIEW_ANALYTICS,
   },
 ];

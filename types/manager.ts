@@ -6,12 +6,23 @@ export interface KPIMetrics {
     change: number;
     trend: 'up' | 'down' | 'stable';
   };
+  sentiment: {
+    score: number;
+    change?: number;
+    trend: 'up' | 'down' | 'stable';
+  };
   csat: {
     score: number;
     change: number;
     trend: 'up' | 'down' | 'stable';
   };
-  fcr: {
+  sop: {
+    percentage: number;
+    change?: number;
+    trend: 'up' | 'down' | 'stable';
+  };
+  /** Kept for agent detail and other views */
+  fcr?: {
     rate: number;
     change: number;
     trend: 'up' | 'down' | 'stable';
@@ -23,6 +34,12 @@ export interface SentimentDataPoint {
   positive: number;
   neutral: number;
   negative: number;
+}
+
+/** Call volume per time bucket for trends chart (hourly or daily). */
+export interface CallVolumeBucket {
+  bucket: string;
+  volume: number;
 }
 
 export interface IntentDistribution {
@@ -165,6 +182,18 @@ export interface SessionDetail {
       value?: number;
     }[];
   };
+}
+
+/** Recent alert for manager overview (WebSocket alert.* or REST from audit_logs). */
+export interface Alert {
+  id: string;
+  severity: 'critical' | 'warning';
+  type: string;
+  agentName: string;
+  agentId?: string;
+  sessionId?: string;
+  timestamp: number;
+  message?: string;
 }
 
 export interface LiveCall {

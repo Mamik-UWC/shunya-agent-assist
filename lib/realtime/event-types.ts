@@ -32,4 +32,19 @@ export interface IntentDetectedEvent extends BaseEvent {
   };
 }
 
-export type RealtimeEvent = CallUpdateEvent | SentimentUpdateEvent | IntentDetectedEvent;
+/** alert.critical, alert.warning, etc. */
+export interface AlertEvent extends BaseEvent {
+  type: `alert.${string}`;
+  data: {
+    id: string;
+    severity: 'critical' | 'warning';
+    type: string;
+    agentName: string;
+    agentId?: string;
+    sessionId?: string;
+    timestamp: number;
+    message?: string;
+  };
+}
+
+export type RealtimeEvent = CallUpdateEvent | SentimentUpdateEvent | IntentDetectedEvent | AlertEvent;

@@ -2,20 +2,62 @@
 
 import * as React from 'react';
 import {
-  DateRangeFilter,
+  DashboardFilters,
   KPIGrid,
-  SentimentTrendChart,
+  CallVolumeChart,
   IntentDistributionChart,
+  RecentAlertsPanel,
   LeaderboardTable,
   SOPAdherenceScoreCard,
   UpsellMetricsPanel,
   useManagerKPI,
+  type DashboardFiltersValues,
+  type Agent,
 } from '@/features/dashboards';
+import type { Alert } from '@/types/manager';
 
 export default function OverviewPage() {
-  const [dateFrom, setDateFrom] = React.useState<Date | undefined>();
-  const [dateTo, setDateTo] = React.useState<Date | undefined>(new Date());
-  const { data, loading, error } = useManagerKPI(dateFrom, dateTo);
+  const [filters, setFilters] = React.useState<DashboardFiltersValues>({
+    dateTo: new Date(),
+  });
+  const [agents, setAgents] = React.useState<Agent[]>([]);
+  const [initialAlerts, setInitialAlerts] = React.useState<Alert[]>([]);
+
+  const { data, loading, error } = useManagerKPI(
+    filters.dateFrom,
+    filters.dateTo,
+    {
+      agentId: filters.agentId,
+      queue: filters.queue,
+      team: filters.team,
+    }
+  );
+
+  React.useEffect(() => {
+    async function loadAgents() {
+      try {
+        const res = await fetch('/api/manager/agents');
+        const json = await res.json();
+        setAgents(json.agents ?? []);
+      } catch {
+        setAgents([]);
+      }
+    }
+    loadAgents();
+  }, []);
+
+  React.useEffect(() => {
+    async function loadAlerts() {
+      try {
+        const res = await fetch('/api/manager/alerts');
+        const json = await res.json();
+        setInitialAlerts(json.alerts ?? []);
+      } catch {
+        setInitialAlerts([]);
+      }
+    }
+    loadAlerts();
+  }, []);
 
   if (error) {
     return (
@@ -27,18 +69,17 @@ export default function OverviewPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col gap-4">
         <div>
           <h1 className="text-3xl font-bold">Overview Dashboard</h1>
           <p className="text-muted-foreground mt-1">
             Monitor key performance indicators and trends
           </p>
         </div>
-        <DateRangeFilter
-          dateFrom={dateFrom}
-          dateTo={dateTo}
-          onDateFromChange={setDateFrom}
-          onDateToChange={setDateTo}
+        <DashboardFilters
+          value={filters}
+          onValueChange={setFilters}
+          agents={agents}
         />
       </div>
 
@@ -46,9 +87,10 @@ export default function OverviewPage() {
         <div className="space-y-6">
           <KPIGrid />
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <SentimentTrendChart />
+            <CallVolumeChart />
             <IntentDistributionChart />
           </div>
+          <RecentAlertsPanel />
           <LeaderboardTable />
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <SOPAdherenceScoreCard />
@@ -59,9 +101,10 @@ export default function OverviewPage() {
         <div className="space-y-6">
           <KPIGrid metrics={data.kpi} />
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <SentimentTrendChart data={data.sentimentTrend} />
+            <CallVolumeChart />
             <IntentDistributionChart data={data.intentDistribution} />
           </div>
+          <RecentAlertsPanel initialAlerts={initialAlerts} />
           <LeaderboardTable data={data.leaderboard} />
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <SOPAdherenceScoreCard data={data.sopAdherence} />

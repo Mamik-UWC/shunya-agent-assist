@@ -16,6 +16,7 @@ export const ROUTES = {
     SESSIONS: "/manager/sessions",
     SESSION_DETAIL: (sessionId: string) => `/manager/sessions/${sessionId}`,
     LIVE_MONITORING: "/manager/live-monitoring",
+    FLOOR: "/manager/floor",
     INTELLIGENCE: "/manager/intelligence",
   },
   // Admin

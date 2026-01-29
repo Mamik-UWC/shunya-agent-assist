@@ -13,9 +13,9 @@ export function checkPermission(user: User, permission: string): boolean {
 
   // Check role-based permissions
   const rolePermissions: Record<string, string[]> = {
-    admin: ["admin", "manager", "agent"],
-    manager: ["manager", "agent"],
-    agent: ["agent"],
+    admin: ["admin", "manager", "agent", "view_agents", "view_sessions", "view_analytics", "live_monitoring", "view_audit_logs", "manage_tenants", "manage_users", "manage_knowledge", "manage_intents", "manage_features", "manage_dashboards", "manage_automation", "manage_data_retention"],
+    manager: ["manager", "agent", "view_agents", "view_sessions", "view_analytics", "live_monitoring"],
+    agent: ["agent", "view_calls", "view_sop", "use_chat_assistant"],
   };
 
   const rolePerms = rolePermissions[userRole] || [];

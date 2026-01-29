@@ -17,7 +17,7 @@ export function IntentDistributionChart({ data, className }: IntentDistributionC
     return (
       <Card className={className}>
         <CardHeader>
-          <CardTitle>Intent Distribution</CardTitle>
+          <CardTitle>Intent Breakdown</CardTitle>
           <CardDescription>Distribution of call intents</CardDescription>
         </CardHeader>
         <CardContent>
@@ -71,12 +71,12 @@ export function IntentDistributionChart({ data, className }: IntentDistributionC
   return (
     <Card className={className}>
       <CardHeader>
-        <CardTitle>Intent Distribution</CardTitle>
+        <CardTitle>Intent Breakdown</CardTitle>
         <CardDescription>Distribution of call intents</CardDescription>
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig}>
-          <ResponsiveContainer width="100%" height={300}>
+          <ResponsiveContainer width="100%" height={600}>
             <PieChart>
               <Pie
                 data={chartData}

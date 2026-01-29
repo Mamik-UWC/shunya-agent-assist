@@ -1,10 +1,12 @@
 'use client';
 
 import * as React from 'react';
+import Link from 'next/link';
 import { TrendingUp, TrendingDown, Minus } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
 import type { KPIMetrics } from '@/types/manager';
+import { ROUTES } from '@/constants/routes';
 
 export interface KPIGridProps {
   metrics?: KPIMetrics;
@@ -14,8 +16,8 @@ export interface KPIGridProps {
 export function KPIGrid({ metrics, className }: KPIGridProps) {
   if (!metrics) {
     return (
-      <div className={cn('grid grid-cols-1 md:grid-cols-3 gap-4', className)}>
-        {[1, 2, 3].map((i) => (
+      <div className={cn('grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4', className)}>
+        {[1, 2, 3, 4].map((i) => (
           <Card key={i}>
             <CardHeader>
               <CardTitle className="text-sm font-medium">Loading...</CardTitle>
@@ -31,30 +33,37 @@ export function KPIGrid({ metrics, className }: KPIGridProps) {
 
   const kpis = [
     {
-      label: 'Total Sessions',
+      label: 'Sessions',
       value: metrics.sessions.total.toLocaleString(),
       change: metrics.sessions.change,
       trend: metrics.sessions.trend,
-      format: (val: number) => val.toLocaleString(),
+      href: ROUTES.MANAGER.SESSIONS,
     },
     {
-      label: 'CSAT Score',
-      value: metrics.csat.score.toFixed(1),
+      label: 'Sentiment',
+      value: (metrics.sentiment.score >= 0 ? '+' : '') + metrics.sentiment.score.toFixed(2),
+      change: metrics.sentiment.change ?? 0,
+      trend: metrics.sentiment.trend,
+      href: undefined,
+    },
+    {
+      label: 'CSAT',
+      value: `${metrics.csat.score}%`,
       change: metrics.csat.change,
       trend: metrics.csat.trend,
-      format: (val: number) => val.toFixed(1),
+      href: undefined,
     },
     {
-      label: 'FCR Rate',
-      value: `${(metrics.fcr.rate * 100).toFixed(1)}%`,
-      change: metrics.fcr.change * 100,
-      trend: metrics.fcr.trend,
-      format: (val: number) => `${(val * 100).toFixed(1)}%`,
+      label: 'SOP',
+      value: `${metrics.sop.percentage}%`,
+      change: metrics.sop.change ?? 0,
+      trend: metrics.sop.trend,
+      href: undefined,
     },
   ];
 
   return (
-    <div className={cn('grid grid-cols-1 md:grid-cols-3 gap-4', className)}>
+    <div className={cn('grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4', className)}>
       {kpis.map((kpi) => {
         const isPositive = kpi.trend === 'up';
         const isNegative = kpi.trend === 'down';
@@ -64,8 +73,8 @@ export function KPIGrid({ metrics, className }: KPIGridProps) {
             ? TrendingDown
             : Minus;
 
-        return (
-          <Card key={kpi.label}>
+        const content = (
+          <>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">{kpi.label}</CardTitle>
             </CardHeader>
@@ -83,10 +92,26 @@ export function KPIGrid({ metrics, className }: KPIGridProps) {
                 <span>
                   {isPositive ? '+' : ''}
                   {kpi.change > 0 ? kpi.change.toFixed(1) : Math.abs(kpi.change).toFixed(1)}
-                  {kpi.label === 'FCR Rate' ? '%' : ''} from last period
+                  {kpi.label === 'CSAT' || kpi.label === 'SOP' ? '%' : ''} from last period
                 </span>
               </div>
             </CardContent>
+          </>
+        );
+
+        if (kpi.href) {
+          return (
+            <Link key={kpi.label} href={kpi.href}>
+              <Card className="transition-colors hover:bg-muted/50 cursor-pointer h-full">
+                {content}
+              </Card>
+            </Link>
+          );
+        }
+
+        return (
+          <Card key={kpi.label} className="h-full">
+            {content}
           </Card>
         );
       })}

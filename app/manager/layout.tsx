@@ -1,5 +1,5 @@
 import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
-import { AppSidebar } from "@/components/layout/AppSidebar";
+import { AppSidebar, type AppSidebarType } from "@/components/layout/AppSidebar";
 import { Header } from "@/components/layout/Header";
 
 export default function ManagerLayout({
@@ -7,10 +7,11 @@ export default function ManagerLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const sidebarType: AppSidebarType = "manager";
+  
   return (
     <SidebarProvider>
-      {/* TODO: Change to "manager" type when development is complete */}
-      <AppSidebar type="all" />
+      <AppSidebar type={sidebarType} />
       <SidebarInset>
         <Header />
         <main className="flex-1 overflow-auto bg-background p-6">{children}</main>

@@ -22,22 +22,38 @@ import {
   type NavigationItem,
 } from "./navigation-items";
 import { cn } from "@/lib/utils/cn";
+import { useAuthStore } from "@/stores/auth.store";
+import { checkPermission } from "@/lib/permissions/rbac";
+
+export type AppSidebarType = "admin" | "agent" | "manager" | "all";
 
 interface AppSidebarProps {
-  type: "admin" | "agent" | "manager" | "all";
+  type: AppSidebarType;
   title?: string;
 }
 
-function getNavigationItems(type: "admin" | "agent" | "manager" | "all"): NavigationItem[] {
+function filterByPermission(items: NavigationItem[], user: { permissions?: string[]; role: string } | null): NavigationItem[] {
+  if (!user) return items;
+  return items.filter((item) => {
+    if (!item.permission) return true;
+    return checkPermission(user as Parameters<typeof checkPermission>[0], item.permission);
+  });
+}
+
+function getNavigationItems(type: AppSidebarType, user: ReturnType<typeof useAuthStore.getState>["user"]): NavigationItem[] {
   switch (type) {
     case "admin":
-      return adminNavigationItems;
+      return filterByPermission(adminNavigationItems, user);
     case "agent":
-      return agentNavigationItems;
+      return filterByPermission(agentNavigationItems, user);
     case "manager":
-      return managerNavigationItems;
+      return filterByPermission(managerNavigationItems, user);
     case "all":
-      return [...adminNavigationItems, ...agentNavigationItems, ...managerNavigationItems];
+      return [
+        ...filterByPermission(adminNavigationItems, user),
+        ...filterByPermission(agentNavigationItems, user),
+        ...filterByPermission(managerNavigationItems, user),
+      ];
     default:
       return [];
   }
@@ -94,7 +110,8 @@ function renderMenuItem(item: NavigationItem, pathname: string | null, isCollaps
 
 export function AppSidebar({ type, title }: AppSidebarProps) {
   const pathname = usePathname();
-  const items = getNavigationItems(type);
+  const user = useAuthStore((state) => state.user);
+  const items = getNavigationItems(type, user);
   const defaultTitle = type === "admin" ? "Admin Portal" : type === "agent" ? "Agent Interface" : type === "manager" ? "Manager Dashboard" : "All Routes";
   const { state } = useSidebar();
   const isCollapsed = state === "collapsed";
@@ -130,7 +147,7 @@ export function AppSidebar({ type, title }: AppSidebarProps) {
               <SidebarGroupLabel>Admin</SidebarGroupLabel>
               <SidebarGroupContent>
                 <SidebarMenu>
-                  {adminNavigationItems.map((item) => renderMenuItem(item, pathname, isCollapsed))}
+                  {filterByPermission(adminNavigationItems, user).map((item) => renderMenuItem(item, pathname, isCollapsed))}
                 </SidebarMenu>
               </SidebarGroupContent>
             </SidebarGroup>
@@ -138,7 +155,7 @@ export function AppSidebar({ type, title }: AppSidebarProps) {
               <SidebarGroupLabel>Agent</SidebarGroupLabel>
               <SidebarGroupContent>
                 <SidebarMenu>
-                  {agentNavigationItems.map((item) => renderMenuItem(item, pathname, isCollapsed))}
+                  {filterByPermission(agentNavigationItems, user).map((item) => renderMenuItem(item, pathname, isCollapsed))}
                 </SidebarMenu>
               </SidebarGroupContent>
             </SidebarGroup>
@@ -146,7 +163,7 @@ export function AppSidebar({ type, title }: AppSidebarProps) {
               <SidebarGroupLabel>Manager</SidebarGroupLabel>
               <SidebarGroupContent>
                 <SidebarMenu>
-                  {managerNavigationItems.map((item) => renderMenuItem(item, pathname, isCollapsed))}
+                  {filterByPermission(managerNavigationItems, user).map((item) => renderMenuItem(item, pathname, isCollapsed))}
                 </SidebarMenu>
               </SidebarGroupContent>
             </SidebarGroup>

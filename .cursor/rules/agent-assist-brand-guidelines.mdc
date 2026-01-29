@@ -1,0 +1,67 @@
+---
+description: Agent Assist platform design system—colors, typography, spacing, components—for dashboards, widgets, and apps. Ensures visual consistency and enterprise-grade clarity.
+globs: "**/*.tsx"
+alwaysApply: false
+---
+
+# Agent Assist Brand Guidelines
+
+**Governance:** Internal Use Only. This rule is the authoritative brand reference. All new components must align; deviations require design approval.
+
+**Personality:** Modern, technical, trustworthy, enterprise-grade, AI-forward but human-readable. Clean layouts, strong hierarchy, neutral foundations with confident accents. Clarity over decoration.
+
+---
+
+## Design Tokens
+
+### Light mode — Colors
+| Role | Value | Use |
+|------|--------|-----|
+| Brand Primary | `#2563EB` | Primary buttons, links, active |
+| Dark Ink | `#0F172A` | Headings, key content |
+| Neutral 900 | `#111827` | Headings |
+| Neutral 700 | `#374151` | Body text |
+| Neutral 500 | `#6B7280` | Descriptions, placeholders |
+| Neutral 200 | `#E5E7EB` | Borders, dividers |
+| Neutral 100 | `#F3F4F6` | Card backgrounds |
+| Accent Teal | `#14B8A6` | Icons, hover, focus |
+| Success | `#22C55E` | Success states |
+| Warning | `#F59E0B` | Warnings |
+| Error | `#EF4444` | Errors |
+| Info | `#3B82F6` | Notices |
+
+### Dark mode — Surfaces & text
+- **Surfaces:** Base `#020617`, Raised (cards) `#0F172A`, Elevated (hover) slightly lighter, Overlay translucent black.
+- **Brand:** Primary `#3B82F6`, Accent `#2DD4BF`, Muted `#60A5FA`.
+- **Text:** Primary `#E5E7EB`, Secondary `#CBD5E1`, Tertiary `#94A3B8`, Disabled `#64748B`.
+- **Rule:** Never use full-brightness semantic colors on dark backgrounds; use muted/safe variants.
+
+### Typography
+- **Font:** Inter, fallback system sans-serif.
+- **Scale:** XL 48px Bold (hero), L 36px Bold (sections), M 28px SemiBold (features), S 22px SemiBold (cards), Body L 18px, Body M 16px (default), Body S 14px, Caption 12px.
+
+### Spacing (px)
+- XS 4, SM 8, MD 16, LG 32, XL 64, XXL 96. Use for icon padding (XS), tight UI (SM), default (MD), section gaps (LG–XXL).
+
+---
+
+## Components
+
+**Buttons**
+- Primary: filled, Brand Primary bg. Secondary: outline. Tertiary: text only.
+- Heights: S 36px, M 44px (default), L 52px (hero). Dark: primary = brand bg + white text; secondary = transparent + brand outline; tertiary = muted text, brightens on hover. Disabled: low contrast, no glow.
+
+**Cards**
+- Radius `8px`, padding `24px`, light neutral border, subtle shadow. Dark: Surface/Raised bg, Neutral 700 border, very subtle shadow; hover = Surface/Elevated.
+
+**Icons**
+- Line/outline style, consistent stroke; sizes 16 / 24 / 32px. Dark: Neutral 500 or Brand Accent; illustrations lower contrast.
+
+---
+
+## Accessibility (non-negotiable)
+- Minimum touch target **44px**.
+- Text contrast **WCAG AA**.
+- Focus states **always visible**. Dark: avoid pure black; no light grey text on dark grey; focus rings clearly visible.
+
+When styling dashboards, widgets, or new UI, use these tokens in Tailwind (or CSS variables) and follow the component and accessibility rules above.

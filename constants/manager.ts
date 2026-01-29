@@ -23,6 +23,13 @@ export const RISK_SEVERITY_COLORS = {
   high: 'hsl(0, 84%, 60%)',
 } as const;
 
+/** Floor view risk levels: Critical (red), Warning (yellow), Normal (green). */
+export const FLOOR_RISK_LEVELS = {
+  critical: 'critical',
+  warning: 'warning',
+  normal: 'normal',
+} as const;
+
 export const DATE_RANGE_OPTIONS = [
   { label: 'Last 7 days', value: '7d' },
   { label: 'Last 30 days', value: '30d' },
@@ -30,6 +37,13 @@ export const DATE_RANGE_OPTIONS = [
   { label: 'This month', value: 'month' },
   { label: 'Last month', value: 'lastMonth' },
   { label: 'Custom', value: 'custom' },
+] as const;
+
+/** Call volume chart time range (spec: 24h, 7d, 30d). */
+export const CALL_VOLUME_TIME_RANGE_OPTIONS = [
+  { label: 'Last 24 hours', value: '24h' },
+  { label: 'Last 7 days', value: '7d' },
+  { label: 'Last 30 days', value: '30d' },
 ] as const;
 
 export const SESSION_STATUS_OPTIONS = [
@@ -44,4 +58,20 @@ export const SENTIMENT_OPTIONS = [
   { label: 'Positive', value: 'positive' },
   { label: 'Neutral', value: 'neutral' },
   { label: 'Negative', value: 'negative' },
+] as const;
+
+/** Mock options for dashboard filter (queue/campaign). */
+export const QUEUE_OPTIONS = [
+  { label: 'All queues', value: 'all' },
+  { label: 'Sales', value: 'sales' },
+  { label: 'Support', value: 'support' },
+  { label: 'Billing', value: 'billing' },
+] as const;
+
+/** Mock options for dashboard filter (team). */
+export const TEAM_OPTIONS = [
+  { label: 'All teams', value: 'all' },
+  { label: 'Team A', value: 'team-a' },
+  { label: 'Team B', value: 'team-b' },
+  { label: 'Team C', value: 'team-c' },
 ] as const;

@@ -88,13 +88,23 @@ export async function GET(request: Request) {
   
   const kpi: KPIMetrics = {
     sessions: {
-      total: 1247,
+      total: 847,
       change: 12.5,
       trend: 'up',
     },
+    sentiment: {
+      score: 0.42,
+      change: 0.05,
+      trend: 'up',
+    },
     csat: {
-      score: 4.3,
-      change: 0.2,
+      score: 82,
+      change: 2,
+      trend: 'up',
+    },
+    sop: {
+      percentage: 91,
+      change: 1.5,
       trend: 'up',
     },
     fcr: {
@@ -127,7 +137,7 @@ export async function GET(request: Request) {
     avgValue: 512.36,
   };
   
-  return NextResponse.json({
+  const response = NextResponse.json({
     kpi,
     sentimentTrend,
     intentDistribution,
@@ -135,4 +145,6 @@ export async function GET(request: Request) {
     sopAdherence,
     upsellMetrics,
   });
+  response.headers.set('Cache-Control', 'private, max-age=300');
+  return response;
 }

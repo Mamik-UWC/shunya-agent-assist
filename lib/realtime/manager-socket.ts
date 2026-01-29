@@ -1,5 +1,5 @@
 import { socketClient } from './socket-client';
-import type { LiveCall } from '@/types/manager';
+import type { LiveCall, Alert } from '@/types/manager';
 import type { RealtimeEvent } from './event-types';
 
 class ManagerSocketClient {
@@ -79,6 +79,25 @@ class ManagerSocketClient {
     return () => {
       unsubscribers.forEach((unsub) => unsub());
     };
+  }
+
+  /** Subscribe to alert.* events (e.g. alert.critical, alert.warning). Updates in real-time. */
+  subscribeToAlerts(onAlert: (alert: Alert) => void): () => void {
+    const unsubscribers: (() => void)[] = [];
+
+    const handleAlert = (event: RealtimeEvent) => {
+      if ('data' in event && typeof event.data === 'object' && event.data !== null) {
+        const data = event.data as Alert;
+        if (data.id && data.severity && data.agentName !== undefined) {
+          onAlert(data);
+        }
+      }
+    };
+
+    unsubscribers.push(socketClient.subscribe('alert.critical', handleAlert));
+    unsubscribers.push(socketClient.subscribe('alert.warning', handleAlert));
+
+    return () => unsubscribers.forEach((unsub) => unsub());
   }
 
   // For mock/development: simulate real-time updates

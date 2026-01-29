@@ -1,0 +1,12 @@
+# Development image: deps only, source mounted at runtime
+FROM node:20-alpine
+RUN corepack enable && corepack prepare pnpm@latest --activate
+WORKDIR /app
+
+# Copy package files only; source is bind-mounted in compose.dev.yaml
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+RUN pnpm install --frozen-lockfile
+
+EXPOSE 3000
+
+CMD ["pnpm", "dev"]

@@ -19,7 +19,17 @@ interface KPIData {
   upsellMetrics: UpsellMetrics;
 }
 
-export function useManagerKPI(dateFrom?: Date, dateTo?: Date) {
+export interface ManagerKPIFilters {
+  agentId?: string;
+  queue?: string;
+  team?: string;
+}
+
+export function useManagerKPI(
+  dateFrom?: Date,
+  dateTo?: Date,
+  filters?: ManagerKPIFilters
+) {
   const [data, setData] = useState<KPIData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
@@ -31,6 +41,9 @@ export function useManagerKPI(dateFrom?: Date, dateTo?: Date) {
         const params = new URLSearchParams();
         if (dateFrom) params.append('dateFrom', dateFrom.toISOString());
         if (dateTo) params.append('dateTo', dateTo.toISOString());
+        if (filters?.agentId && filters.agentId !== 'all') params.append('agentId', filters.agentId);
+        if (filters?.queue && filters.queue !== 'all') params.append('queue', filters.queue);
+        if (filters?.team && filters.team !== 'all') params.append('team', filters.team);
 
         const response = await fetch(`/api/manager/kpi?${params.toString()}`);
         if (!response.ok) {
@@ -47,7 +60,7 @@ export function useManagerKPI(dateFrom?: Date, dateTo?: Date) {
     }
 
     fetchKPI();
-  }, [dateFrom, dateTo]);
+  }, [dateFrom, dateTo, filters?.agentId, filters?.queue, filters?.team]);
 
   return { data, loading, error };
 }
