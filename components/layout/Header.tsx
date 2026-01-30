@@ -19,7 +19,7 @@ export function Header({ className, children, ...props }: HeaderProps) {
   return (
     <header
       className={cn(
-        "w-full bg-background flex items-center justify-between px-6 py-4",
+        "sticky top-0 z-20 w-full bg-background/80 backdrop-blur-md flex items-center justify-between px-6 py-4",
         className
       )}
       {...props}

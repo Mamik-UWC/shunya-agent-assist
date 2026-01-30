@@ -62,7 +62,7 @@ function getNavigationItems(type: AppSidebarType, user: ReturnType<typeof useAut
 function renderMenuItem(item: NavigationItem, pathname: string | null, isCollapsed: boolean) {
   const Icon = item.icon;
   const isActive = pathname === item.url || pathname?.startsWith(item.url + "/");
-  
+
   return (
     <SidebarMenuItem key={item.title}>
       <SidebarMenuButton
@@ -117,7 +117,7 @@ export function AppSidebar({ type, title }: AppSidebarProps) {
   const isCollapsed = state === "collapsed";
 
   return (
-    <Sidebar collapsible="icon" variant="sidebar">
+    <Sidebar collapsible="icon" variant="sidebar" >
       <SidebarHeader>
         <div className="flex h-16 items-center gap-2">
           <div className="flex h-8 w-8 items-center justify-center rounded-md bg-primary text-primary-foreground">

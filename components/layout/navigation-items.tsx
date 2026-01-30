@@ -36,6 +36,16 @@ export const adminNavigationItems: NavigationItem[] = [
     icon: Shield,
   },
   {
+    title: "Dashboard",
+    url: ROUTES.ADMIN.DASHBOARD,
+    icon: BarChart3,
+  },
+  {
+    title: "Users",
+    url: ROUTES.ADMIN.USERS,
+    icon: Users,
+  },
+  {
     title: "Knowledge",
     url: ROUTES.ADMIN.KNOWLEDGE,
     icon: BookOpen,
@@ -50,11 +60,7 @@ export const adminNavigationItems: NavigationItem[] = [
     url: ROUTES.ADMIN.FEATURES,
     icon: Settings,
   },
-  {
-    title: "Dashboards",
-    url: ROUTES.ADMIN.DASHBOARDS,
-    icon: BarChart3,
-  },
+
   {
     title: "Automation",
     url: ROUTES.ADMIN.AUTOMATION,
@@ -69,6 +75,11 @@ export const adminNavigationItems: NavigationItem[] = [
     title: "Audit Logs",
     url: ROUTES.ADMIN.AUDIT_LOGS,
     icon: FileSearch,
+  },
+  {
+    title: "Configuration",
+    url: ROUTES.ADMIN.CONFIGURATION,
+    icon: Settings,
   },
 ];
 

@@ -25,9 +25,11 @@ export const ROUTES = {
     KNOWLEDGE: "/admin/knowledge",
     INTENTS: "/admin/intents",
     FEATURES: "/admin/features",
-    DASHBOARDS: "/admin/dashboards",
+    DASHBOARD: "/admin/dashboard",
     AUTOMATION: "/admin/automation",
     DATA_RETENTION: "/admin/data-retention",
     AUDIT_LOGS: "/admin/audit-logs",
+    CONFIGURATION: "/admin/configuration",
+    USERS: "/admin/users",
   },
 } as const;
