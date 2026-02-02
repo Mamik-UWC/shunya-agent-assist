@@ -1,11 +1,12 @@
 'use client';
 
 import * as React from 'react';
-import { Phone, User } from 'lucide-react';
+import { Phone, PhoneIcon, User } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { useLiveCallStore } from '@/stores/live-call.store';
+import { Button } from '@/components/ui/button';
 
-export function IncomingCallOverlay() {
+export function IncomingCallOverlay({ onAnswer, onDecline }: { onAnswer: () => void; onDecline: () => void }) {
     const callData = useLiveCallStore((state) => state.callData);
 
     // If no call data (shouldn't happen in this state usually), show generic
@@ -37,6 +38,11 @@ export function IncomingCallOverlay() {
                             <p className="text-sm text-muted-foreground">Connecting...</p>
                         </div>
                     </div>
+
+                    <Button onClick={onAnswer}>
+                        <PhoneIcon />
+                        Answer
+                    </Button>
 
                     <p className="text-xs text-muted-foreground text-center max-w-[250px]">
                         Please answer using your softphone or desk phone.

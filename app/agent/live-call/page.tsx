@@ -14,9 +14,45 @@ import {
   PostCallScreen,
 } from '@/features/live-call';
 import { useLiveCallStore } from '@/stores/live-call.store';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { ChatHistory, ChatInput, ChatMessage } from '@/features/chat-assistant';
+import { Button } from '@/components/ui/button';
+import { PhoneIcon } from 'lucide-react';
 
 export default function LiveCallPage() {
   const { callData, callStatus, setCallStatus, incomingCall, startCall, endCall } = useLiveCallStore();
+
+
+  const [messages, setMessages] = React.useState<ChatMessage[]>([]);
+  const [isLoading, setIsLoading] = React.useState(false);
+
+  const handleSendMessage = async (message: string) => {
+    const userMessage: ChatMessage = {
+      id: `msg-${Date.now()}`,
+      role: 'user',
+      content: message,
+      timestamp: Date.now(),
+    };
+
+    setMessages((prev) => [...prev, userMessage]);
+    setIsLoading(true);
+
+    // Simulate API call - in production, call actual API
+    setTimeout(() => {
+      const assistantMessage: ChatMessage = {
+        id: `msg-${Date.now() + 1}`,
+        role: 'assistant',
+        content: 'This is a mock response. In production, this would come from your AI assistant API.',
+        timestamp: Date.now(),
+      };
+      setMessages((prev) => [...prev, assistantMessage]);
+      setIsLoading(false);
+    }, 1000);
+  };
+
+  const handlePromptSelect = (prompt: string) => {
+    handleSendMessage(prompt);
+  };
 
   // Mock data initialization - can be removed when real integration is ready
   React.useEffect(() => {
@@ -74,11 +110,8 @@ export default function LiveCallPage() {
     // Handle action selection
   };
 
-  const handleSendMessage = (message: string) => {
-    console.log('Sending message:', message);
-    // Handle message sending
-  };
 
+  console.log(callData, callStatus);
   // DEBUG CONTROLS (Top right for testing)
   const DebugControls = () => (
     <div className="fixed top-20 right-4 z-50 flex flex-col gap-2 p-2 bg-muted/80 rounded border text-xs">
@@ -93,7 +126,7 @@ export default function LiveCallPage() {
     return (
       <>
         <DebugControls />
-        <IncomingCallOverlay />
+        <IncomingCallOverlay onAnswer={startCall} onDecline={endCall} />
         {/* We render the background active screen faintly or just the overlay? 
                  Design doc says "Agent Assist UI auto-opens". 
                  Let's keep the main layout hidden or blurred if we wanted context, 
@@ -106,6 +139,8 @@ export default function LiveCallPage() {
             <h1 className="text-2xl font-bold mb-2">Agent Assist</h1>
             <p className="text-muted-foreground">Waiting for call...</p>
           </div>
+
+
         </div>
       </>
     );
@@ -164,15 +199,33 @@ export default function LiveCallPage() {
           <NextBestActionCard onActionSelect={handleActionSelect} />
         </div>
         <div className="space-y-6">
-          {/* Additional sidebar content can go here */}
+
+          <Card className="h-[600px] flex flex-col">
+            <CardHeader>
+              <CardTitle>Chat</CardTitle>
+            </CardHeader>
+            <CardContent className="flex-1 flex flex-col p-0 overflow-hidden">
+              <div className="flex-1 p-4 h-full  max-h-[calc(60dvh - 128px)] overflow-y-auto">
+                <ChatHistory messages={messages} />
+              </div>
+              <div className="border-t p-4">
+                <ChatInput
+                  onSendMessage={handleSendMessage}
+                  disabled={isLoading}
+                  isLoading={isLoading}
+                />
+              </div>
+            </CardContent>
+          </Card>
         </div>
       </div>
 
-      <AgentChatDock
+
+      {/* <AgentChatDock
         messages={[]}
         onSendMessage={handleSendMessage}
         position="bottom-right"
-      />
+      /> */}
     </div>
   );
 }
