@@ -36,7 +36,7 @@ export function FloorHeader({
             htmlFor="floor-auto-refresh"
             className="cursor-pointer text-sm text-muted-foreground"
           >
-            Auto-refresh {autoRefresh ? "✓" : ""}
+            Auto-refresh
           </Label>
         </div>
       </div>

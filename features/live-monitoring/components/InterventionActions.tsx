@@ -1,9 +1,15 @@
-'use client';
+"use client";
 
-import * as React from 'react';
-import { Phone, MessageSquare, UserPlus, AlertCircle } from 'lucide-react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
+import * as React from "react";
+import { Phone, MessageSquare, UserPlus, AlertCircle } from "lucide-react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -12,9 +18,9 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '@/components/ui/dialog';
-import { Textarea } from '@/components/ui/textarea';
-import { Label } from '@/components/ui/label';
+} from "@/components/ui/dialog";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
 
 export interface InterventionActionsProps {
   callId?: string;
@@ -23,37 +29,39 @@ export interface InterventionActionsProps {
 }
 
 export type InterventionAction =
-  | { type: 'listen'; notes?: string }
-  | { type: 'whisper'; message: string }
-  | { type: 'barge'; notes?: string }
-  | { type: 'transfer'; target: string; notes?: string };
+  | { type: "listen"; notes?: string }
+  | { type: "whisper"; message: string }
+  | { type: "barge"; notes?: string }
+  | { type: "transfer"; target: string; notes?: string };
 
 export function InterventionActions({
   callId,
   onIntervene,
   className,
 }: InterventionActionsProps) {
-  const [selectedAction, setSelectedAction] = React.useState<string | null>(null);
-  const [notes, setNotes] = React.useState('');
-  const [message, setMessage] = React.useState('');
-  const [target, setTarget] = React.useState('');
+  const [selectedAction, setSelectedAction] = React.useState<string | null>(
+    null,
+  );
+  const [notes, setNotes] = React.useState("");
+  const [message, setMessage] = React.useState("");
+  const [target, setTarget] = React.useState("");
 
   const handleAction = (actionType: string) => {
     if (!callId) return;
 
     let action: InterventionAction;
     switch (actionType) {
-      case 'listen':
-        action = { type: 'listen', notes };
+      case "listen":
+        action = { type: "listen", notes };
         break;
-      case 'whisper':
-        action = { type: 'whisper', message };
+      case "whisper":
+        action = { type: "whisper", message };
         break;
-      case 'barge':
-        action = { type: 'barge', notes };
+      case "barge":
+        action = { type: "barge", notes };
         break;
-      case 'transfer':
-        action = { type: 'transfer', target, notes };
+      case "transfer":
+        action = { type: "transfer", target, notes };
         break;
       default:
         return;
@@ -61,39 +69,39 @@ export function InterventionActions({
 
     onIntervene?.(action);
     setSelectedAction(null);
-    setNotes('');
-    setMessage('');
-    setTarget('');
+    setNotes("");
+    setMessage("");
+    setTarget("");
   };
 
   const actions = [
     {
-      id: 'listen',
-      label: 'Listen In',
-      description: 'Monitor the call without being heard',
+      id: "listen",
+      label: "Listen In",
+      description: "Monitor the call without being heard",
       icon: Phone,
-      color: 'text-blue-600',
+      color: "text-blue-600",
     },
     {
-      id: 'whisper',
-      label: 'Whisper',
-      description: 'Send a private message to the agent',
+      id: "whisper",
+      label: "Whisper",
+      description: "Send a private message to the agent",
       icon: MessageSquare,
-      color: 'text-green-600',
+      color: "text-green-600",
     },
     {
-      id: 'barge',
-      label: 'Barge In',
-      description: 'Join the call and speak to both parties',
+      id: "barge",
+      label: "Barge In",
+      description: "Join the call and speak to both parties",
       icon: UserPlus,
-      color: 'text-amber-600',
+      color: "text-amber-600",
     },
     {
-      id: 'transfer',
-      label: 'Transfer',
-      description: 'Transfer the call to another agent',
+      id: "transfer",
+      label: "Transfer",
+      description: "Transfer the call to another agent",
       icon: AlertCircle,
-      color: 'text-red-600',
+      color: "text-red-600",
     },
   ];
 
@@ -117,7 +125,7 @@ export function InterventionActions({
                     <action.icon className={`h-5 w-5 ${action.color}`} />
                     <span className="font-medium">{action.label}</span>
                   </div>
-                  <p className="text-xs text-muted-foreground text-left">
+                  <p className="text-xs text-muted-foreground text-left w-full whitespace-normal">
                     {action.description}
                   </p>
                 </Button>
@@ -128,7 +136,7 @@ export function InterventionActions({
                   <DialogDescription>{action.description}</DialogDescription>
                 </DialogHeader>
                 <div className="space-y-4 py-4">
-                  {action.id === 'whisper' && (
+                  {action.id === "whisper" && (
                     <div className="space-y-2">
                       <Label htmlFor="message">Message</Label>
                       <Textarea
@@ -139,7 +147,7 @@ export function InterventionActions({
                       />
                     </div>
                   )}
-                  {action.id === 'transfer' && (
+                  {action.id === "transfer" && (
                     <div className="space-y-2">
                       <Label htmlFor="target">Transfer To</Label>
                       <Textarea
@@ -150,7 +158,9 @@ export function InterventionActions({
                       />
                     </div>
                   )}
-                  {(action.id === 'listen' || action.id === 'barge' || action.id === 'transfer') && (
+                  {(action.id === "listen" ||
+                    action.id === "barge" ||
+                    action.id === "transfer") && (
                     <div className="space-y-2">
                       <Label htmlFor="notes">Notes (optional)</Label>
                       <Textarea
@@ -167,9 +177,9 @@ export function InterventionActions({
                     variant="outline"
                     onClick={() => {
                       setSelectedAction(null);
-                      setNotes('');
-                      setMessage('');
-                      setTarget('');
+                      setNotes("");
+                      setMessage("");
+                      setTarget("");
                     }}
                   >
                     Cancel

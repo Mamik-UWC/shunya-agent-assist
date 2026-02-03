@@ -1,13 +1,20 @@
-'use client';
+"use client";
 
-import * as React from 'react';
-import { useRouter } from 'next/navigation';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { ROUTES } from '@/constants/routes';
-import { managerSocketClient } from '@/lib/realtime/manager-socket';
-import type { Alert as AlertType } from '@/types/manager';
-import { AlertCircle, AlertTriangle, CheckCircle, Info } from 'lucide-react';
+import * as React from "react";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { ROUTES } from "@/constants/routes";
+
+import type { Alert as AlertType } from "@/types/manager";
+import { AlertCircle, AlertTriangle, CheckCircle, Info } from "lucide-react";
 
 function formatRelativeTime(timestamp: number): string {
   const seconds = Math.floor((Date.now() - timestamp) / 1000);
@@ -17,7 +24,7 @@ function formatRelativeTime(timestamp: number): string {
   const hours = Math.floor(minutes / 60);
   if (hours < 24) return `${hours} hr ago`;
   const days = Math.floor(hours / 24);
-  return `${days} day${days !== 1 ? 's' : ''} ago`;
+  return `${days} day${days !== 1 ? "s" : ""} ago`;
 }
 
 export interface RecentAlertsPanelProps {
@@ -26,28 +33,59 @@ export interface RecentAlertsPanelProps {
   className?: string;
 }
 
-export function RecentAlertsPanel({ initialAlerts = [], className }: RecentAlertsPanelProps) {
+export function RecentAlertsPanel({
+  initialAlerts = [],
+  className,
+}: RecentAlertsPanelProps) {
   const router = useRouter();
   const [alerts, setAlerts] = React.useState<AlertType[]>(initialAlerts);
   const [connected, setConnected] = React.useState(false);
 
-  React.useEffect(() => {
-    const wsUrl = process.env.NEXT_PUBLIC_WS_URL || 'ws://localhost:3001';
-    const hasWsUrl = Boolean(wsUrl);
-    if (!hasWsUrl) {
-      setConnected(false);
-      return;
-    }
+  useEffect(() => {
+    // Simulate real-time updates without WebSocket
 
-    managerSocketClient.connect();
-    setConnected(true);
+    const intervalId = setInterval(() => {
+      // 20% chance to recieve a new alert
+      if (Math.random() > 0.8) {
+        const severityOptions: AlertType["severity"][] = [
+          "critical",
+          "warning",
+          "info",
+          "success",
+        ];
+        const types = [
+          "Sentiment Drop",
+          "High Silence",
+          "Compliance Violation",
+          "Positive Feedback",
+          "Upsell Opportunity",
+        ];
+        const agents = [
+          "Sarah Jenkins",
+          "Mike Ross",
+          "Jessica Pearson",
+          "Harvey Specter",
+          "Louis Litt",
+        ];
 
-    const unsubscribe = managerSocketClient.subscribeToAlerts((alert) => {
-      setAlerts((prev) => [alert, ...prev].slice(0, 50));
-    });
+        const newAlert: AlertType = {
+          id: Math.random().toString(36).substr(2, 9),
+          severity:
+            severityOptions[Math.floor(Math.random() * severityOptions.length)],
+          type: types[Math.floor(Math.random() * types.length)],
+          agentName: agents[Math.floor(Math.random() * agents.length)],
+          timestamp: Date.now(),
+          message: "Simulated alert message",
+          sessionId: "simulated-session-" + Math.floor(Math.random() * 1000),
+        };
+
+        setAlerts((prev) => [newAlert, ...prev].slice(0, 50));
+      }
+    }, 2000);
 
     return () => {
-      unsubscribe();
+      clearInterval(intervalId);
+      setConnected(false);
     };
   }, []);
 
@@ -61,30 +99,30 @@ export function RecentAlertsPanel({ initialAlerts = [], className }: RecentAlert
 
   const displayAlerts = alerts.length > 0 ? alerts : initialAlerts;
 
-  const getAlertVariant = (severity: AlertType['severity']) => {
+  const getAlertVariant = (severity: AlertType["severity"]) => {
     switch (severity) {
-      case 'critical':
-        return 'destructive';
-      case 'warning':
-        return 'warning';
-      case 'info':
-        return 'info';
-      case 'success':
-        return 'success';
+      case "critical":
+        return "destructive";
+      case "warning":
+        return "warning";
+      case "info":
+        return "info";
+      case "success":
+        return "success";
       default:
-        return 'default';
+        return "default";
     }
   };
 
-  const getAlertIcon = (severity: AlertType['severity']) => {
+  const getAlertIcon = (severity: AlertType["severity"]) => {
     switch (severity) {
-      case 'critical':
+      case "critical":
         return <AlertCircle className="h-4 w-4" />;
-      case 'warning':
+      case "warning":
         return <AlertTriangle className="h-4 w-4" />;
-      case 'info':
+      case "info":
         return <Info className="h-4 w-4" />;
-      case 'success':
+      case "success":
         return <CheckCircle className="h-4 w-4" />;
       default:
         return <AlertCircle className="h-4 w-4" />;
@@ -97,8 +135,8 @@ export function RecentAlertsPanel({ initialAlerts = [], className }: RecentAlert
         <CardTitle>Recent Alerts</CardTitle>
         <CardDescription>
           {connected
-            ? 'Updates in real-time via WebSocket'
-            : 'Real-time alerts when connected'}
+            ? "Updates in real-time via WebSocket"
+            : "Real-time alerts when connected"}
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -115,7 +153,7 @@ export function RecentAlertsPanel({ initialAlerts = [], className }: RecentAlert
                   tabIndex={0}
                   onClick={() => handleAlertClick(alert)}
                   onKeyDown={(e) => {
-                    if (e.key === 'Enter' || e.key === ' ') {
+                    if (e.key === "Enter" || e.key === " ") {
                       e.preventDefault();
                       handleAlertClick(alert);
                     }
@@ -130,9 +168,7 @@ export function RecentAlertsPanel({ initialAlerts = [], className }: RecentAlert
                         {formatRelativeTime(alert.timestamp)}
                       </span>
                     </AlertTitle>
-                    <AlertDescription>
-                      {alert.agentName}
-                    </AlertDescription>
+                    <AlertDescription>{alert.agentName}</AlertDescription>
                   </Alert>
                 </div>
               </li>

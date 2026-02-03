@@ -2,7 +2,8 @@
 
 export const SENTIMENT_COLORS = {
   positive: 'hsl(142, 76%, 36%)',
-  neutral: 'hsl(38, 92%, 50%)',
+  neutral: 'hsl(215, 16%, 47%)',
+  warning: 'hsl(38, 92%, 50%)',
   negative: 'hsl(0, 84%, 60%)',
 } as const;
 
