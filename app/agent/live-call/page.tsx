@@ -210,36 +210,48 @@ export default function LiveCallPage() {
           Real-time decision support during active calls
         </p>
       </div>
-      <div className="flex gap-3">
+      <div className="flex flex-col md:flex-row gap-4 items-stretch md:items-start">
+        <CustomerDetailsCard className=" h-full" />
         <LiveCallHeader
-          customerId={callData?.id || "CUST-???"} // Fallback if data missing
-          customerName={
-            (callData?.["customerName"] as string) || "Unknown Customer"
-          }
-          className="w-max rounded-2xl bg-blue-400/10 border-blue-200/20"
+          className="w-full md:w-auto rounded-2xl bg-blue-400/10 border-blue-200/20"
           onEndCall={endCall}
         />
-
-        <CustomerDetailsCard />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2 space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-3 lg:col-span-2">
-              <IntentBadge />
-              <SentimentIndicator />
-              <ComplianceStatus />
+          {/* Unified Live Analysis Card */}
+          <Card className="overflow-hidden pt-0">
+            <CardHeader className="bg-muted/30 py-3 px-4 border-b">
+              <CardTitle className="text-sm font-medium h-full pt-2 pb-0">
+                Live Analysis
+              </CardTitle>
+            </CardHeader>
+            <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x">
+              <div className="p-4">
+                <IntentBadge variant="ghost" />
+              </div>
+              <div className="p-4">
+                <SentimentIndicator variant="ghost" />
+              </div>
+              <div className="p-4">
+                <ComplianceStatus variant="ghost" />
+              </div>
             </div>
+          </Card>
 
-            <UpsellPrompt
-              onDismiss={() => console.log("Dismissed")}
-              onApply={(id) => console.log("Applied:", id)}
-            />
-          </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-2 gap-3 lg:col-span-2">
-            <SOPFlowPanel />
-            <NextBestActionCard onActionSelect={handleActionSelect} />
+          {/* Guidance & Actions Grid */}
+          <div className="grid md:grid-cols-2 gap-6">
+            <div className="space-y-6">
+              <SOPFlowPanel className="h-full" />
+            </div>
+            <div className="space-y-6">
+              <NextBestActionCard onActionSelect={handleActionSelect} />
+              <UpsellPrompt
+                onDismiss={() => console.log("Dismissed")}
+                onApply={(id) => console.log("Applied:", id)}
+              />
+            </div>
           </div>
         </div>
         <div className="space-y-6">

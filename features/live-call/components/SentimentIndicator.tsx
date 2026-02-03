@@ -10,6 +10,7 @@ import { cn } from "@/lib/utils";
 
 export interface SentimentIndicatorProps {
   className?: string;
+  variant?: "card" | "ghost";
 }
 
 type Sentiment = "positive" | "neutral" | "negative" | "warning";
@@ -68,7 +69,10 @@ function SentimentDisplay({ label, sentiment, value }: SentimentDisplayProps) {
   );
 }
 
-export function SentimentIndicator({ className }: SentimentIndicatorProps) {
+export function SentimentIndicator({
+  className,
+  variant = "card",
+}: SentimentIndicatorProps) {
   const callData = useLiveCallStore((state) => state.callData);
   const hasSentiment = useFeature("live_sentiment");
 
@@ -85,13 +89,8 @@ export function SentimentIndicator({ className }: SentimentIndicatorProps) {
     | number
     | undefined;
 
-  return (
-    <Card
-      className={cn(
-        "w-full col-span-1 p-4 flex flex-col justify-center",
-        className,
-      )}
-    >
+  const content = (
+    <div className={cn("w-full flex flex-col justify-center", className)}>
       <span className="text-xs text-muted-foreground font-medium uppercase tracking-wider mb-3">
         Sentiment
       </span>
@@ -107,6 +106,19 @@ export function SentimentIndicator({ className }: SentimentIndicatorProps) {
           value={agentSentimentValue}
         />
       </div>
+    </div>
+  );
+
+  if (variant === "ghost") return content;
+
+  return (
+    <Card
+      className={cn(
+        "w-full col-span-1 p-4 flex flex-col justify-center",
+        className,
+      )}
+    >
+      {content}
     </Card>
   );
 }

@@ -9,11 +9,15 @@ import { cn } from "@/lib/utils";
 
 export interface ComplianceStatusProps {
   className?: string;
+  variant?: "card" | "ghost";
 }
 
 type ComplianceStatus = "compliant" | "non-compliant" | "pending";
 
-export function ComplianceStatus({ className }: ComplianceStatusProps) {
+export function ComplianceStatus({
+  className,
+  variant = "card",
+}: ComplianceStatusProps) {
   const callData = useLiveCallStore((state) => state.callData);
   const status = (callData?.complianceStatus as ComplianceStatus) || "pending";
 
@@ -54,14 +58,8 @@ export function ComplianceStatus({ className }: ComplianceStatusProps) {
   const Icon = config.icon;
   const issues = (callData?.complianceIssues as string[]) || [];
 
-  return (
-    <Card
-      className={cn(
-        "border-2 p-4 flex flex-col justify-between",
-        config.borderColor,
-        className,
-      )}
-    >
+  const content = (
+    <div className={cn("flex flex-col justify-between", className)}>
       <div className="flex items-center gap-2 mb-2">
         <Icon className={cn("h-4 w-4", config.color)} />
         <span className="text-xs text-muted-foreground font-medium uppercase tracking-wider">
@@ -78,6 +76,20 @@ export function ComplianceStatus({ className }: ComplianceStatusProps) {
           </Badge>
         )}
       </div>
+    </div>
+  );
+
+  if (variant === "ghost") return content;
+
+  return (
+    <Card
+      className={cn(
+        "border-2 p-4 flex flex-col justify-between",
+        config.borderColor,
+        className,
+      )}
+    >
+      {content}
     </Card>
   );
 }

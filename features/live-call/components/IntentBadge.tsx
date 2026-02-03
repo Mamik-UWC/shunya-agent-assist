@@ -8,16 +8,17 @@ import { cn } from "@/lib/utils";
 
 export interface IntentBadgeProps {
   className?: string;
+  variant?: "card" | "ghost";
 }
 
-export function IntentBadge({ className }: IntentBadgeProps) {
+export function IntentBadge({ className, variant = "card" }: IntentBadgeProps) {
   const callData = useLiveCallStore((state) => state.callData);
   const intent = callData?.intent;
   const confidence = (callData?.confidence as number) || 0;
 
   if (!intent) {
-    return (
-      <Card className={cn("w-full col-span-1 p-4", className)}>
+    const content = (
+      <div className={cn("w-full", className)}>
         <div className="flex justify-between items-start mb-3">
           <span className="text-xs text-muted-foreground font-medium uppercase tracking-wider">
             Intent
@@ -33,7 +34,12 @@ export function IntentBadge({ className }: IntentBadgeProps) {
           </div>
           <Progress value={0} className="h-1.5" />
         </div>
-      </Card>
+      </div>
+    );
+
+    if (variant === "ghost") return content;
+    return (
+      <Card className={cn("w-full col-span-1 p-4", className)}>{content}</Card>
     );
   }
 
@@ -51,8 +57,8 @@ export function IntentBadge({ className }: IntentBadgeProps) {
     return "destructive";
   };
 
-  return (
-    <Card className={cn("w-full col-span-1 p-4", className)}>
+  const content = (
+    <div className={cn("w-full", className)}>
       <div className="flex justify-between items-start mb-3">
         <span className="text-xs text-muted-foreground font-medium uppercase tracking-wider">
           Intent
@@ -73,6 +79,12 @@ export function IntentBadge({ className }: IntentBadgeProps) {
         </div>
         <Progress value={confidence * 100} className="h-1.5" />
       </div>
-    </Card>
+    </div>
+  );
+
+  if (variant === "ghost") return content;
+
+  return (
+    <Card className={cn("w-full col-span-1 p-4", className)}>{content}</Card>
   );
 }

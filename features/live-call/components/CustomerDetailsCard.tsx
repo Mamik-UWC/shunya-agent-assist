@@ -4,13 +4,19 @@ import { Badge } from "@/components/ui/badge";
 import { User, Phone, Calendar, Repeat } from "lucide-react";
 import { useLiveCallStore } from "@/stores/live-call.store";
 
-export function CustomerDetailsCard() {
+import { cn } from "@/lib/utils";
+
+export interface CustomerDetailsCardProps {
+  className?: string;
+}
+
+export function CustomerDetailsCard({ className }: CustomerDetailsCardProps) {
   const callData = useLiveCallStore((state) => state.callData);
 
   if (!callData) return null;
 
   return (
-    <Card className="p-4 bg-card/50">
+    <Card className={cn("p-4 bg-card/50", className)}>
       <div className="flex flex-col gap-4">
         {/* Header with Name and Badge */}
         <div className="flex items-start justify-between">

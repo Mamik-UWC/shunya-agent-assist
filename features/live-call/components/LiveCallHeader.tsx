@@ -3,7 +3,6 @@
 import * as React from "react";
 import {
   Clock,
-  User,
   Mic,
   MicOff,
   PhoneOff,
@@ -24,18 +23,11 @@ import { useLiveCallStore } from "@/stores/live-call.store";
 import { cn } from "@/lib/utils";
 
 export interface LiveCallHeaderProps {
-  customerId?: string;
-  customerName?: string;
   className?: string;
   onEndCall?: () => void;
 }
 
-export function LiveCallHeader({
-  customerId,
-  customerName,
-  className,
-  onEndCall,
-}: LiveCallHeaderProps) {
+export function LiveCallHeader({ className, onEndCall }: LiveCallHeaderProps) {
   const callData = useLiveCallStore((state) => state.callData);
   const [duration, setDuration] = React.useState(0);
   const [isMuted, setIsMuted] = React.useState(false);
@@ -181,27 +173,6 @@ export function LiveCallHeader({
               <p>End Call</p>
             </TooltipContent>
           </Tooltip>
-        </div>
-
-        <div className="flex items-center gap-3">
-          <div className="text-right hidden sm:block">
-            {customerName && (
-              <div className="text-sm font-semibold">{customerName}</div>
-            )}
-            {customerId && (
-              <div className="text-xs text-muted-foreground font-mono">
-                {customerId}
-              </div>
-            )}
-            {!customerName && !customerId && (
-              <span className="text-sm text-muted-foreground">
-                Unknown Customer
-              </span>
-            )}
-          </div>
-          <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center">
-            <User className="h-4 w-4 text-primary" />
-          </div>
         </div>
       </Card>
     </TooltipProvider>
