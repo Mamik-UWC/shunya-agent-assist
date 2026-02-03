@@ -31,8 +31,13 @@ export interface NavigationItem {
 
 export const adminNavigationItems: NavigationItem[] = [
   {
-    title: "Onboarding",
+    title: "Onboarding-01",
     url: ROUTES.ADMIN.ONBOARDING,
+    icon: Shield,
+  },
+  {
+    title: "Onboarding-02",
+    url: ROUTES.ADMIN.ONBOARDING1,
     icon: Shield,
   },
   {

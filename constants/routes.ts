@@ -22,6 +22,7 @@ export const ROUTES = {
   // Admin
   ADMIN: {
     ONBOARDING: "/admin/onboarding",
+    ONBOARDING1: "/admin/new-onboarding",
     KNOWLEDGE: "/admin/knowledge",
     INTENTS: "/admin/intents",
     FEATURES: "/admin/features",
